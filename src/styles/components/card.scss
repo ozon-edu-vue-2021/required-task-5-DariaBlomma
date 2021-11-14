@@ -1,0 +1,51 @@
+.card {
+    margin: $standart-margin;
+    padding: $standart-padding;
+
+    &__img {
+        margin: $smaller-margin;
+    }
+
+    &__name, &__price {
+        font-weight: bold;
+        margin-bottom: $smaller-margin;
+    }
+
+    &__name {
+        color: $dark-blue-color;
+    }
+
+    &__price {
+        font-size: 1.2rem;
+    }
+}
+.card-vertical {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+
+    &__description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 60px;
+    }
+}
+
+.card-horizontal {
+    display: flex;
+    align-items: center;
+
+    &__img {
+        max-width: 150px;
+    }
+
+    &__description, .add-to-cart {
+        display: none;
+    }
+
+    &__name, &__price {
+        margin-right: $standart-margin;
+    }
+}

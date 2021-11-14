@@ -1,0 +1,10 @@
+.products {
+    display: flex;
+    flex-wrap: wrap;
+
+    .to-cart-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+}

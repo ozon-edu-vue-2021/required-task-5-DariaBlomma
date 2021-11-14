@@ -1,0 +1,84 @@
+legend {
+    font-weight: bold;
+    color: $dark-blue-color;
+}
+
+fieldset {
+    margin-bottom: $standart-margin;
+}
+
+input, select {
+    margin-top: $smaller-margin; 
+    padding: $standart-padding;
+    width: 100%;
+    height: 45px;
+    padding: 5px;
+    padding-left: $smaller-padding;
+}
+
+option {
+    padding: $smaller-padding;
+}
+
+// inputs
+input[type='radio'] {
+    width: $input-radio-size;
+    height: $input-radio-size;
+    margin-top: 0;
+    margin-right: $standart-margin;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+input:focus, input:focus-visible, select:focus, select:focus-visible {
+    outline: 1px solid $dark-blue-color;
+}
+
+input[type='radio']:focus, input[type='radio']:focus-visible, input[type='checkbox']:focus, input[type='checkbox']:focus-visible {
+    outline: none;
+    border: none;
+}
+
+label, .label {
+    margin-bottom: $smaller-margin;
+    color: $gray-color;
+    font-size: 0.9rem;
+}
+
+.label {
+    margin-bottom: 0;
+}
+
+.required, .optional, .required-example {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.required-example {
+    font-style: italic;
+    max-width: fit-content;
+    margin-left: $standart-margin;
+    padding-left: 5px;
+    margin-bottom: $smaller-margin;
+}
+
+.required::after, .required-example::after  {
+    color: $red-invalid-color;
+    content: ' * ';
+    position: absolute;
+    right: 0;
+    top: $smaller-margin;
+}
+
+.required-example::after {
+    left: -$standart-margin;
+    top: -5px;
+}

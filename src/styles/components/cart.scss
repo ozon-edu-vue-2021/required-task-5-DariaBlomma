@@ -1,0 +1,41 @@
+.cart {
+    display: grid;
+    grid-template-areas: 
+    "header header header"
+    "list list info"
+    ;
+
+    &__header {
+        grid-area: header;
+        position: relative;
+        max-width: fit-content;
+    }
+
+    &__title {
+        margin-left: $standart-margin;
+    }
+
+    &__items-amount {  
+        position: absolute;
+        top: 15px;
+        right: -25px;
+        color: $darker-gray-color;
+        font-size: 1rem;
+    }
+
+    &__list {
+        grid-area: list;
+    }
+
+    &__info {
+        grid-area: info;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__subtitle {
+        font-weight: bold;
+        color: $dark-blue-color;
+        padding-right: $smaller-padding;
+    }
+}
