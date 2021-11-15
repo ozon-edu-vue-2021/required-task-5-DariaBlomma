@@ -13,17 +13,24 @@
     <span :class="['card__description', `${cardType}__description`]">
       {{ item.description }}
     </span>
-    <button
-      v-if="this.cardType === 'card-vertical'"
-      :class="[
-        'btn',
-        { 'add-to-cart': !itemIsAdded },
-        { 'remove-from-cart': itemIsAdded },
-      ]"
-      @click="updateCartList(item)"
-    >
-      {{ btnText }}
-    </button>
+    <input type="number" class="input card__amount" v-model="amount" />
+    <div class="card__btns">
+      <button class="btn card__btn add-to-cart" @click="addToCart">Add</button>
+      <button
+        class="btn card__btn remove-from-cart"
+        :disabled="!canBeRemoved"
+        @click="removeOneFromCart"
+      >
+        -1
+      </button>
+      <button
+        class="btn card__btn remove-all-from-cart"
+        :disabled="!canBeRemoved"
+        @click="removeAllFromCart"
+      >
+        Remove whole item
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -44,29 +51,53 @@ export default {
   },
   data() {
     return {
-      itemIsAdded: false,
+      // itemIsAdded: false,
+      amount: 1,
     };
   },
   created() {
     // иначе теряется после перехода по ссылке.
     // Как computed обновляется только после перехода по ссылке, не после клика
-    this.itemIsAdded = this.cartList[this.item.uid] ? true : false;
+    // this.itemIsAdded = this.cartList[this.item.uid] ? true : false;
+
+    // this.canBeRemoved = this.cartList[this.item.uid]?.amount > 0 ? true : false;
+    // this.amount = this.cartList[this.item.uid]?.amount || 1;
+
+    // const cartItem = this.cartList.find((item) => item.uid == this.item.uid);
+    // this.canBeRemoved = cartItem?.amount > 0 ? true : false;
+    // this.amount = cartItem?.amount || 1;
+    this.amount = this.cartItem?.amount || 1;
   },
   computed: {
     ...mapState(["cartList"]),
-    btnText() {
-      return this.itemIsAdded ? "Remove from cart" : "Add to cart";
+    cartItem() {
+      // console.log('this.cartList.find((item) => item.uid == this.item.uid): ', this.cartList.find((item) => item.uid == this.item.uid));
+      return this.cartList.find((item) => item.uid == this.item.uid) || {};
+    },
+    canBeRemoved() {
+      return this.cartItem?.amount > 0 ? true : false;
     },
   },
   methods: {
-    updateCartList(item) {
-      console.log("item: ", item);
-      if (!this.itemIsAdded) {
-        this.$store.dispatch("addToCart", item);
-      } else {
-        this.$store.dispatch("removeFromCart", item);
-      }
-      this.itemIsAdded = !this.itemIsAdded;
+    addToCart() {
+      const newItem = this.item;
+      newItem.amount = parseInt(this.amount);
+      console.log("newItem: ", newItem);
+      this.$store.dispatch("addToCart", newItem);
+      this.amount = this.cartItem?.amount;
+    },
+    removeOneFromCart() {
+      const payload = {
+        id: this.item.uid,
+        amount: 1,
+      };
+      this.$store.dispatch("removeOneFromCart", payload);
+      this.amount = this.cartItem?.amount;
+    },
+    removeAllFromCart() {
+      this.$store.dispatch("removeAllFromCart", this.item.uid);
+      // console.log('this.cartItem', this.cartItem);
+      this.amount = 0;
     },
   },
 };

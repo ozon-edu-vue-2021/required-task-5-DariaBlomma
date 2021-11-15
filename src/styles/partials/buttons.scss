@@ -47,4 +47,10 @@
 
 .remove-from-cart {
     background-color: $red-invalid-color;
+    margin-left: $standart-margin;
+    margin-right: $standart-margin;
+}
+
+.remove-all-from-cart {
+    background-color: $darker-gray-color;
 }

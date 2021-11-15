@@ -18,6 +18,15 @@
     &__price {
         font-size: 1.2rem;
     }
+
+    &__amount {
+        width: 30%;
+        margin: auto;
+    }
+
+    &__btns {
+        display: flex;
+    }
 }
 .card-vertical {
     display: flex;
@@ -41,8 +50,12 @@
         max-width: 150px;
     }
 
-    &__description, .add-to-cart {
+    &__description {
         display: none;
+    }
+
+    .add-to-cart {
+        margin-left: $standart-margin;
     }
 
     &__name, &__price {

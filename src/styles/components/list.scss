@@ -2,9 +2,25 @@
     display: flex;
     flex-wrap: wrap;
 
-    .to-cart-btn {
+    .cart-link {
         position: absolute;
         top: 20px;
         right: 20px;
+    }
+
+    .cart-size {
+        position: absolute;
+        top: 0;
+        right: -20px;
+        background-color: $red-invalid-color;
+        // padding: $smaller-padding;
+        border-radius: 50%;
+        color: white;
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

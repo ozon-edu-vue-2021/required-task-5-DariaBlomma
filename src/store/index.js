@@ -9,7 +9,7 @@ import getRandomNumber from "@/helpers/getRandomNumber";
 export default new Vuex.Store({
   state: () => ({
     productsList: [],
-    cartList: {},
+    cartList: [],
   }),
   getters: {
     test: (state) => {
@@ -20,66 +20,83 @@ export default new Vuex.Store({
         }, 0);
       }
     },
-    getTotalCartPrice: (state) => {
-      const list = Object.values(state.cartList);
-      console.log('list: ', list);
-      if (list.length) {
-        return list.reduce((acc, item) => {
-          acc += item.price;
+    getCartSize: (state) => {
+      return (
+        state.cartList.reduce((acc, item) => {
+          console.log("item in cart size: ", item);
+          acc += item.amount;
           return acc;
-        }, 0);
-      } else {
-        // для теста, лучшей видимости
-        // return 90;
-        return 0;
-      }
+        }, 0) || 0
+      );
+    },
+    getTotalCartPrice: (state) => {
+      return (
+        state.cartList.reduce((acc, item) => {
+          acc += item.price * item.amount;
+          return acc;
+        }, 0) || 0
+      );
     },
     getOrderList: (state) => {
-      return Object.values(state.cartList).reduce((acc, item, index) => {
-        acc += `${index + 1}. ${item.dish} `;
-        return acc;
-      }, "");
+      return (
+        state.cartList.reduce((acc, item, index) => {
+          acc += `${index + 1}. ${item.dish} `;
+          return acc;
+        }, "") || ""
+      );
     },
   },
   mutations: {
-    addPriceProperty(state) {
+    // adds price, img random number and amount
+    addProperties(state) {
       if (state.productsList.length) {
         state.productsList.forEach((item) => {
           item.price = getRandomNumber(100);
-        });
-      }
-    },
-    addImgName(state) {
-      if (state.productsList.length) {
-        state.productsList.forEach((item) => {
           item.imgName = getRandomNumber(12);
+          // item.amount = 1;
+          Vue.set(item, "amount", 1);
         });
       }
     },
     setProductsList(state, value) {
       state.productsList = value;
     },
-    addToCartList(state, value) {
-      state.cartList[value.uid] = value;
+    addToCartList(state, product) {
+      const existingProduct = state.cartList.find(
+        (item) => item.uid === product.uid
+      );
+      if (!existingProduct) {
+        state.cartList.push(product);
+      } else {
+        existingProduct.amount += product.amount;
+      }
     },
-    removeFromCartList(state, value) {
-      delete state.cartList[value.uid];
+    removeOneFromCartList(state, payload) {
+      state.cartList.forEach((item) => {
+        if (item.amount !== 0) {
+          item.amount -= payload.amount;
+        }
+      });
+    },
+    removeAllFromCartList(state, id) {
+      state.cartList = state.cartList.filter((item) => item.uid !== id);
     },
   },
   actions: {
     async getProductsList(context) {
       const response = await fetch(API_LINK);
       const products = await response.json();
-      // console.log(" products: ", products);
       context.commit("setProductsList", products);
-      context.commit("addPriceProperty");
-      context.commit("addImgName");
+      context.commit("addProperties");
     },
     addToCart(context, payload) {
       context.commit("addToCartList", payload);
     },
-    removeFromCart(context, payload) {
-      context.commit("removeFromCartList", payload);
+    removeOneFromCart(context, payload) {
+      context.commit("removeOneFromCartList", payload);
+    },
+    removeAllFromCart(context, payload) {
+      context.commit("removeAllFromCartList", payload);
     },
   },
 });

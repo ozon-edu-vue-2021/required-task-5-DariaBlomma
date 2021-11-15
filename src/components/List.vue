@@ -1,13 +1,19 @@
 <template>
   <div class="products">
-    <router-link class="btn to-cart-btn" :to="{ name: 'cart' }">
-      My cart
-    </router-link>
+    <div class="cart-link">
+      <router-link class="btn to-cart-btn" :to="{ name: 'cart' }">
+        My cart
+      </router-link>
+      <div class="cart-size">
+        {{ getCartSize }}
+      </div>
+    </div>
+
     <Card v-for="item in productsList" :key="item.uid" :item="item" />
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Card from "@/components/Card.vue";
 
 export default {
@@ -21,7 +27,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(["productsList"]),
+    ...mapState(["productsList", "cartList"]),
+    ...mapGetters(["getCartSize"]),
   },
 };
 </script>
