@@ -11,12 +11,14 @@ import { mapState } from "vuex";
 import Card from "@/components/Card.vue";
 
 export default {
-  name: "List",
+  name: "Products",
   components: {
     Card,
   },
   created() {
-    this.$store.dispatch("getProductsList");
+    if (!this.productsList.length) {
+      this.$store.dispatch("getProductsList");
+    }
   },
   computed: {
     ...mapState(["productsList"]),

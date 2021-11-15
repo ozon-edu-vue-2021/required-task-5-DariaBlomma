@@ -12,6 +12,14 @@ export default new Vuex.Store({
     cartList: {},
   }),
   getters: {
+    test: (state) => {
+      if (state.productsList.length) {
+        return state.productsList.reduce((acc, item) => {
+          acc += item.id;
+          return acc;
+        }, 0);
+      }
+    },
     getTotalCartPrice: (state) => {
       const list = Object.values(state.cartList);
       console.log('list: ', list);
@@ -21,7 +29,9 @@ export default new Vuex.Store({
           return acc;
         }, 0);
       } else {
-        return 90;
+        // для теста, лучшей видимости
+        // return 90;
+        return 0;
       }
     },
     getOrderList: (state) => {
@@ -38,7 +48,6 @@ export default new Vuex.Store({
           item.price = getRandomNumber(100);
         });
       }
-      // console.log("state.productsList: ", state.productsList);
     },
     addImgName(state) {
       if (state.productsList.length) {
@@ -51,12 +60,10 @@ export default new Vuex.Store({
       state.productsList = value;
     },
     addToCartList(state, value) {
-      state.cartList[value.id] = value;
-      // console.log("added state.cartList: ", state.cartList);
+      state.cartList[value.uid] = value;
     },
     removeFromCartList(state, value) {
-      delete state.cartList[value.id];
-      // console.log("removed state.cartList: ", state.cartList);
+      delete state.cartList[value.uid];
     },
   },
   actions: {
@@ -69,11 +76,9 @@ export default new Vuex.Store({
       context.commit("addImgName");
     },
     addToCart(context, payload) {
-      // console.log(" add : ", payload);
       context.commit("addToCartList", payload);
     },
     removeFromCart(context, payload) {
-      // console.log("remove: ", payload);
       context.commit("removeFromCartList", payload);
     },
   },

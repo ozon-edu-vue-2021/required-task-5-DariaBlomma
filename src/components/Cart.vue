@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     ...mapState(["cartList"]),
-    ...mapGetters(["getTotalCartPrice", "getOrderList"]),
+    ...mapGetters(["getTotalCartPrice", "getOrderList", "test"]),
   },
   methods: {
     makeOrder() {

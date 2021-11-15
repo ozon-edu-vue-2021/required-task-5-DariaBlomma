@@ -14,6 +14,7 @@
       {{ item.description }}
     </span>
     <button
+      v-if="this.cardType === 'card-vertical'"
       :class="[
         'btn',
         { 'add-to-cart': !itemIsAdded },
@@ -26,7 +27,7 @@
   </div>
 </template>
 <script>
-import getRandomNumber from "@/helpers/getRandomNumber.js";
+import { mapState } from "vuex";
 
 export default {
   name: "Card",
@@ -46,13 +47,18 @@ export default {
       itemIsAdded: false,
     };
   },
+  created() {
+    // иначе теряется после перехода по ссылке.
+    // Как computed обновляется только после перехода по ссылке, не после клика
+    this.itemIsAdded = this.cartList[this.item.uid] ? true : false;
+  },
   computed: {
+    ...mapState(["cartList"]),
     btnText() {
       return this.itemIsAdded ? "Remove from cart" : "Add to cart";
     },
   },
   methods: {
-    getRandomNumber,
     updateCartList(item) {
       console.log("item: ", item);
       if (!this.itemIsAdded) {
