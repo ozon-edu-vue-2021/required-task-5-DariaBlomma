@@ -21,8 +21,6 @@
       <span v-if="!Object.values(cartList).length" class="empty-cart">
         No products added yet ...
       </span>
-      <br />
-      List: {{ cartList }}
     </div>
     <div class="cart__info">
       <button

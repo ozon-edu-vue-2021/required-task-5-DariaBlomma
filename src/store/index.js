@@ -13,14 +13,20 @@ export default new Vuex.Store({
   }),
   getters: {
     getTotalCartPrice: (state) => {
-      return Object.values(state.cartList).reduce((acc, item) => {
-        acc += item.price;
-        return acc;
-      }, 0);
+      const list = Object.values(state.cartList);
+      console.log('list: ', list);
+      if (list.length) {
+        return list.reduce((acc, item) => {
+          acc += item.price;
+          return acc;
+        }, 0);
+      } else {
+        return 90;
+      }
     },
     getOrderList: (state) => {
-      return Object.values(state.cartList).reduce((acc, item) => {
-        acc += `${item.dish}, `;
+      return Object.values(state.cartList).reduce((acc, item, index) => {
+        acc += `${index + 1}. ${item.dish} `;
         return acc;
       }, "");
     },
