@@ -23,7 +23,6 @@ export default new Vuex.Store({
     getCartSize: (state) => {
       return (
         state.cartList.reduce((acc, item) => {
-          console.log("item in cart size: ", item);
           acc += item.amount;
           return acc;
         }, 0) || 0
@@ -61,22 +60,14 @@ export default new Vuex.Store({
     setProductsList(state, value) {
       state.productsList = value;
     },
-    addToCartList(state, product) {
-      const existingProduct = state.cartList.find(
-        (item) => item.uid === product.uid
-      );
-      if (!existingProduct) {
-        state.cartList.push(product);
-      } else {
-        existingProduct.amount += product.amount;
-      }
+    addNewToCartList(state, product) {
+      state.cartList.push(product);
     },
-    removeOneFromCartList(state, payload) {
-      state.cartList.forEach((item) => {
-        if (item.amount !== 0) {
-          item.amount -= payload.amount;
-        }
-      });
+    addOldToCartList(state, product) {
+      product.amount = product.newAmount;
+    },
+    removeOneFromCartList(state, product) {
+      product.amount -= 1;
     },
     removeAllFromCartList(state, id) {
       state.cartList = state.cartList.filter((item) => item.uid !== id);
@@ -89,14 +80,29 @@ export default new Vuex.Store({
       context.commit("setProductsList", products);
       context.commit("addProperties");
     },
-    addToCart(context, payload) {
-      context.commit("addToCartList", payload);
-    },
-    removeOneFromCart(context, payload) {
-      context.commit("removeOneFromCartList", payload);
-    },
-    removeAllFromCart(context, payload) {
-      context.commit("removeAllFromCartList", payload);
+    changeCartProductAmount(context, payload) {
+      const existingProduct = context.state.cartList.find(
+        (item) => item.uid === payload.uid
+      );
+      switch (payload.action) {
+        case "plus":
+          if (existingProduct) {
+            existingProduct.newAmount = payload.amount;
+            context.commit("addOldToCartList", existingProduct);
+          } else {
+            context.commit("addNewToCartList", payload);
+          }
+          break;
+        case "minus":
+          if (existingProduct.amount !== 0) {
+            context.commit("removeOneFromCartList", existingProduct);
+          } else {
+            context.commit("removeAllFromCartList", payload.uid);
+          }
+          break;
+        case "delete":
+          context.commit("removeAllFromCartList", payload.uid);
+      }
     },
   },
 });

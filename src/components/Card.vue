@@ -15,18 +15,23 @@
     </span>
     <input type="number" class="input card__amount" v-model="amount" />
     <div class="card__btns">
-      <button class="btn card__btn add-to-cart" @click="addToCart">Add</button>
+      <button
+        class="btn card__btn add-to-cart"
+        @click="changeCartProductAmount('plus')"
+      >
+        Add
+      </button>
       <button
         class="btn card__btn remove-from-cart"
         :disabled="!canBeRemoved"
-        @click="removeOneFromCart"
+        @click="changeCartProductAmount('minus')"
       >
         -1
       </button>
       <button
         class="btn card__btn remove-all-from-cart"
         :disabled="!canBeRemoved"
-        @click="removeAllFromCart"
+        @click="changeCartProductAmount('delete')"
       >
         Remove whole item
       </button>
@@ -51,27 +56,15 @@ export default {
   },
   data() {
     return {
-      // itemIsAdded: false,
       amount: 1,
     };
   },
   created() {
-    // иначе теряется после перехода по ссылке.
-    // Как computed обновляется только после перехода по ссылке, не после клика
-    // this.itemIsAdded = this.cartList[this.item.uid] ? true : false;
-
-    // this.canBeRemoved = this.cartList[this.item.uid]?.amount > 0 ? true : false;
-    // this.amount = this.cartList[this.item.uid]?.amount || 1;
-
-    // const cartItem = this.cartList.find((item) => item.uid == this.item.uid);
-    // this.canBeRemoved = cartItem?.amount > 0 ? true : false;
-    // this.amount = cartItem?.amount || 1;
     this.amount = this.cartItem?.amount || 1;
   },
   computed: {
     ...mapState(["cartList"]),
     cartItem() {
-      // console.log('this.cartList.find((item) => item.uid == this.item.uid): ', this.cartList.find((item) => item.uid == this.item.uid));
       return this.cartList.find((item) => item.uid == this.item.uid) || {};
     },
     canBeRemoved() {
@@ -79,25 +72,14 @@ export default {
     },
   },
   methods: {
-    addToCart() {
-      const newItem = this.item;
-      newItem.amount = parseInt(this.amount);
-      console.log("newItem: ", newItem);
-      this.$store.dispatch("addToCart", newItem);
-      this.amount = this.cartItem?.amount;
-    },
-    removeOneFromCart() {
+    changeCartProductAmount(type) {
       const payload = {
-        id: this.item.uid,
-        amount: 1,
+        ...this.item,
+        action: type,
+        amount: parseInt(this.amount),
       };
-      this.$store.dispatch("removeOneFromCart", payload);
-      this.amount = this.cartItem?.amount;
-    },
-    removeAllFromCart() {
-      this.$store.dispatch("removeAllFromCart", this.item.uid);
-      // console.log('this.cartItem', this.cartItem);
-      this.amount = 0;
+      this.$store.dispatch("changeCartProductAmount", payload);
+      this.amount = this.cartItem?.amount || 1;
     },
   },
 };
