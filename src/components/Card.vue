@@ -4,8 +4,10 @@
       :src="require(`@/assets/images/${item.imgName}.webp`)"
       :class="['card__img', `${cardType}__img`]"
     />
-    <!-- <div class="card__chosen-sign">?</div>
-        <div class="card__more-sign">...</div> -->
+    <Favourite
+      :class="['card__favourite-sign', { marked: isAddedToFavourites }]"
+      @click="addToFavourites"
+    />
     <span :class="['card__name', `${cardType}__name`]">{{ item.dish }}</span>
     <span :class="['card__price', `${cardType}__price`]">
       {{ item.price }} P
@@ -40,9 +42,13 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import Favourite from "@/assets/icons/favourite.svg";
 
 export default {
   name: "Card",
+  components: {
+    Favourite,
+  },
   props: {
     item: {
       type: Object,
@@ -57,10 +63,12 @@ export default {
   data() {
     return {
       amount: 1,
+      isAddedToFavourites: false,
     };
   },
   created() {
     this.amount = this.cartItem?.amount || 1;
+    this.isAddedToFavourites = this.item.isFavourite || false;
   },
   computed: {
     ...mapState(["cartList"]),
@@ -80,6 +88,14 @@ export default {
       };
       this.$store.dispatch("changeCartProductAmount", payload);
       this.amount = this.cartItem?.amount || 1;
+    },
+    addToFavourites() {
+      this.isAddedToFavourites = !this.isAddedToFavourites;
+      const payload = {
+        ...this.item,
+        isFavourite: this.isAddedToFavourites,
+      };
+      this.$store.commit("updateFavouritesList", payload);
     },
   },
 };

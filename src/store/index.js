@@ -12,14 +12,6 @@ export default new Vuex.Store({
     cartList: [],
   }),
   getters: {
-    test: (state) => {
-      if (state.productsList.length) {
-        return state.productsList.reduce((acc, item) => {
-          acc += item.id;
-          return acc;
-        }, 0);
-      }
-    },
     getCartSize: (state) => {
       return (
         state.cartList.reduce((acc, item) => {
@@ -44,9 +36,20 @@ export default new Vuex.Store({
         }, "") || ""
       );
     },
+    getFavouritesList: (state) => {
+      // не работает, возвращает пустой массив. Даже при добавлении нового свойства сразу в addProperties
+      // return state.productsList.filter((item) => {
+      //   item.isFavourite === true;
+      // });
+      return state.productsList.filter((item) => {
+        if (item.isFavourite) {
+          return item.isFavourite === true;
+        }
+      });
+    },
   },
   mutations: {
-    // adds price, img random number and amount
+    // adds price, img random number, amount, isFavourite
     addProperties(state) {
       if (state.productsList.length) {
         state.productsList.forEach((item) => {
@@ -54,6 +57,7 @@ export default new Vuex.Store({
           item.imgName = getRandomNumber(12);
           // item.amount = 1;
           Vue.set(item, "amount", 1);
+          // Vue.set(item, "isFavourite", false);
         });
       }
     },
@@ -71,6 +75,13 @@ export default new Vuex.Store({
     },
     removeAllFromCartList(state, id) {
       state.cartList = state.cartList.filter((item) => item.uid !== id);
+    },
+    updateFavouritesList(state, product) {
+      const existingProduct = state.productsList.find(
+        (item) => item.uid === product.uid
+      );
+      // existingProduct.isFavourite = product.isFavourite;
+      Vue.set(existingProduct, "isFavourite", product.isFavourite);
     },
   },
   actions: {

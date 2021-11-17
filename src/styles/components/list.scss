@@ -4,16 +4,15 @@
 
     .cart-link {
         position: absolute;
-        top: 20px;
+        top: 5px;
         right: 20px;
     }
 
-    .cart-size {
+    .cart-size, .favourites-size {
         position: absolute;
         top: 0;
         right: -20px;
         background-color: $red-invalid-color;
-        // padding: $smaller-padding;
         border-radius: 50%;
         color: white;
         width: 20px;
@@ -23,4 +22,16 @@
         justify-content: center;
         align-items: center;
     }
+
+    .favourites-link {
+        position: absolute;
+        top: 5px;
+        left: 20px;
+    }
+}
+
+.products-link {
+    position: absolute;
+    top: 5px;
+    left: 20px;
 }

@@ -1,9 +1,28 @@
 .card {
+    position: relative;
     margin: $standart-margin;
     padding: $standart-padding;
 
     &__img {
         margin: $smaller-margin;
+    }
+
+    &__favourite-sign {
+        position: absolute;
+        top: 20px;
+        right: 7px;
+    }
+
+    &__favourite-sign.marked {
+        fill: $red-invalid-color;
+    }
+
+    &__favourite-sign :hover {
+        fill: $darker-gray-color;
+    }
+
+    &__favourite-sign.marked :hover{
+        fill: #c53434;
     }
 
     &__name, &__price {
