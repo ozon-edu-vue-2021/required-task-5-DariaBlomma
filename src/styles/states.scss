@@ -26,3 +26,8 @@
 .empty-message {
     margin-top: $standart-margin * 5;
 }
+
+.centered {
+    display: flex;
+    justify-content: center;
+}

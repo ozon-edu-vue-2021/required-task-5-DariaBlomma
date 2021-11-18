@@ -44,18 +44,3 @@
 .btn:disabled {
     opacity: 0.3;
 }
-
-.remove-from-cart {
-    background-color: $red-invalid-color;
-    margin-left: $standart-margin;
-    margin-right: $standart-margin;
-}
-
-.remove-all-from-cart {
-    background-color: $darker-gray-color;
-}
-
-.to-favourites-btn {
-    white-space: nowrap;
-    min-width: fit-content;
-}

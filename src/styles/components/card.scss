@@ -1,3 +1,8 @@
+.cards-list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .card {
     position: relative;
     margin: $standart-margin;
@@ -46,7 +51,18 @@
     &__btns {
         display: flex;
     }
+
+    .remove-from-cart {
+        background-color: $red-invalid-color;
+        margin-left: $standart-margin;
+        margin-right: $standart-margin;
+    }
+    
+    .remove-all-from-cart {
+        background-color: $darker-gray-color;
+    }
 }
+
 .card-vertical {
     display: flex;
     flex-direction: column;
@@ -79,5 +95,9 @@
 
     &__name, &__price {
         margin-right: $standart-margin;
+    }
+
+    &__price {
+        min-width: fit-content;
     }
 }
