@@ -1,0 +1,33 @@
+// form
+.invalid {
+    outline: 1px solid $red-invalid-color;
+}
+
+.valid {
+    outline: 1px solid $green-valid-color;
+}
+
+.form__must-mark, .error-message {
+    color: $red-invalid-color;
+}
+
+.error-message {
+    display: block;
+    margin: $standart-margin 0;
+    margin-bottom: $standart-margin;
+}
+
+.success-sent {
+    color: $green-valid-color;
+    margin: auto;
+    margin-top: $standart-margin;
+}
+
+.empty-message {
+    margin-top: $standart-margin * 5;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,25 @@
+.page-link {
+    position: relative;
+}
+
+.page-link {
+    a {
+        white-space: nowrap;
+        min-width: fit-content;
+    }
+}
+
+.size-tooltip {
+    position: absolute;
+    top: 0;
+    right: -20px;
+    background-color: $red-invalid-color;
+    border-radius: 50%;
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-size: 0.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

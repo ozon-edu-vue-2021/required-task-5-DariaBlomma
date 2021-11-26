@@ -1,0 +1,21 @@
+.cart {
+    &__title {
+        position: relative;
+        margin-left: $standart-margin;
+        max-width: fit-content;
+    }
+
+    &__subtitle {
+        font-weight: bold;
+        color: $dark-blue-color;
+        padding-right: $smaller-padding;
+    }
+
+    &__price {
+        min-width: fit-content;
+    }
+    
+    .make-order {
+        margin-left: 0;
+    }
+}
