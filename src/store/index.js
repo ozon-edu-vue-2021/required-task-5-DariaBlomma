@@ -15,8 +15,7 @@ export default new Vuex.Store({
     getCartSize: (state) => {
       return (
         state.cartList.reduce((acc, item) => {
-          acc += item.amount;
-          return acc;
+          return acc + item.amount;
         }, 0) || 0
       );
     },
@@ -37,27 +36,22 @@ export default new Vuex.Store({
       );
     },
     getFavouritesList: (state) => {
-      // не работает, возвращает пустой массив. Даже при добавлении нового свойства сразу в addProperties
-      // return state.productsList.filter((item) => {
-      //   item.isFavourite === true;
-      // });
-      return state.productsList.filter((item) => {
-        if (item.isFavourite) {
-          return item.isFavourite === true;
-        }
-      });
+      // не работает, возвращает пустой массив.
+      console.log('in getter');
+      console.log(state.productsList.filter((item) => item.isFavourite));
+      return state.productsList.filter((item) => item.isFavourite);
     },
   },
   mutations: {
-    // adds price, img random number, amount, isFavourite
+    // adds price, img random number, amount
     addProperties(state) {
       if (state.productsList.length) {
-        state.productsList.forEach((item) => {
+        state.productsList = state.productsList.map((item) => {
           item.price = getRandomNumber(100);
           item.imgName = getRandomNumber(12);
-          // item.amount = 1;
-          Vue.set(item, "amount", 1);
-          // Vue.set(item, "isFavourite", false);
+          item.amount = 1;
+          // item.isFavourite = false;
+          return item;
         });
       }
     },
@@ -77,19 +71,49 @@ export default new Vuex.Store({
       state.cartList = state.cartList.filter((item) => item.uid !== id);
     },
     updateFavouritesList(state, product) {
-      const existingProduct = state.productsList.find(
-        (item) => item.uid === product.uid
-      );
-      // existingProduct.isFavourite = product.isFavourite;
-      Vue.set(existingProduct, "isFavourite", product.isFavourite);
+      // 1 вариант рабочий
+
+      state.productsList = state.productsList.map((item) => {
+        if (item.uid === product.uid) {
+          item.isFavourite = product.isFavourite;
+        }
+        return item;
+      });
+
+      // 2 вариант рабочий
+
+      // const existingIndex = state.productsList.findIndex(
+      //   (item) => item.uid === product.uid
+      // );
+
+      // Vue.set(
+      //   state.productsList[existingIndex],
+      //   "isFavourite",
+      //   product.isFavourite
+      // );
+
+      // 1 вариант НЕрабочий
+
+      // state.productsList[existingIndex] = {
+      //   ...state.productsList[existingIndex],
+      //   isFavourite: product.isFavourite,
+      // };
+
+      // 2 вариант НЕрабочий
+
+      // state.productsList[existingIndex].isFavourite = product.isFavourite;
     },
   },
   actions: {
     async getProductsList(context) {
-      const response = await fetch(API_LINK);
-      const products = await response.json();
-      context.commit("setProductsList", products);
-      context.commit("addProperties");
+      try {
+        const response = await fetch(API_LINK);
+        const products = await response.json();
+        context.commit("setProductsList", products);
+        context.commit("addProperties");
+      } catch (e) {
+        console.warn("Error in getProductsList: ", e);
+      }
     },
     changeCartProductAmount(context, payload) {
       const existingProduct = context.state.cartList.find(
